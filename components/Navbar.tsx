@@ -31,7 +31,7 @@ const Navbar = ()=>{
               <button className="btn" key={provider.name} onClick={()=>signIn(provider.id)}>Sign In</button>
             )
           })}
-          {session?.user && <button className="btn" onClick={()=>signOut}>Sign Out</button>}
+          {session?.user && <button className="btn" onClick={()=>signOut()}>Sign Out</button>}
           
         </div>
       </nav>
