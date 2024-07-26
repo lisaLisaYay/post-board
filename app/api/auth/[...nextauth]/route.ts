@@ -31,7 +31,6 @@ const handler = NextAuth({
         async signIn({profile}){
             try {
                 await connectToDb()
-                console.log(profile);
                 const userExists = await User.findOne({
                     email: profile?.email
                 })
@@ -40,7 +39,7 @@ const handler = NextAuth({
                     await User.create({
                         email: profile?.email,
                         username: profile?.name?.replace(" ", "_") || profile?.login,
-                        image:profile?.image
+                        image:profile?.image || profile?.avatar_url
                     })
                     
                 }

@@ -2,37 +2,66 @@
 import { useSession, signIn, signOut, getProviders, LiteralUnion,ClientSafeProvider } from "next-auth/react";
 import { BuiltInProviderType } from "next-auth/providers/index";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = ()=>{
 
   const {data: session} = useSession()
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
+  const [open, setOpen] = useState(false)
 
   useEffect(()=>{
     const setUpProviders = async ()=>{
       const res = await getProviders()
+      
       setProviders(res)
     }
-
+    
     setUpProviders()
   },[])
 
     return (
-      <nav className="w-full py-1 px-5 flex justify-between fixed">
+      <nav className="w-full py-2 px-5 flex justify-between fixed">
         <div className="">
-          {session?.user?
-          <p>{session.user.name}</p>:
-          <p>logo</p>}
+          <Link href="/"  onClick={()=>setOpen(false)}>Logo</Link>
         </div>
         <div>
-          {providers && 
-          Object.values(providers).map((provider)=>{
-            return (
-              <button className="btn" key={provider.name} onClick={()=>signIn(provider.id)}>Sign In</button>
-            )
-          })}
-          {session?.user && <button className="btn" onClick={()=>signOut()}>Sign Out</button>}
-          
+          {session?.user ? (
+            <div className="flex gap-4">
+              <button className="flex relative items-center" onClick={()=>setOpen((prev)=>!prev)}>
+                <Image
+                  src={`${session?.user.image}`}
+                  alt="icon"
+                  height={40}
+                  width={40}
+                  className="rounded-full mr-2"
+                />
+                <p>{session?.user.name} &#9662;</p>
+              </button>
+              {open&&<div className="grid absolute top-14 bg-slate-800 w-48">
+                <Link href="/profile" className="py-1 hover:bg-slate-100 hover:text-black justify-center flex" onClick={()=>setOpen(false)}>Profile</Link>
+                <button className="py-1 hover:bg-slate-100 hover:text-black" onClick={() => signOut()}>
+                  Log Out
+                </button>
+              </div>}
+            </div>
+          ) : (
+            <div>
+              {providers &&
+                Object.values(providers).map((provider) => {
+                  return (
+                    <button
+                      className="btn"
+                      key={provider.name}
+                      onClick={() => signIn(provider.id)}
+                    >
+                      Sign In with {provider.name}
+                    </button>
+                  );
+                })}
+            </div>
+          )}
         </div>
       </nav>
     );
