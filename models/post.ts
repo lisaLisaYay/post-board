@@ -8,6 +8,10 @@ const PostSchema = new Schema({
     post: {
         type: String,
         required: [true, "Post can't be empty"]
+    },
+    likedBy:{
+        type: Array,
+        default:[]
     }
 })
 

@@ -8,6 +8,7 @@ declare module "next-auth" {
   }
   interface Profile {
       login: string;
-      avatar_url:string
+      avatar_url:string;
+      picture:string
   }
 }
