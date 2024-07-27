@@ -10,6 +10,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+  z-index: 1;
 }
 
 article {
@@ -28,6 +30,47 @@ main {
 
 .btn:hover {
   background-color: rgb(25, 25, 26);
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 80%;
+  color: rgb(227, 231, 235);
+  max-width: 500px;
+  height: fit-content;
+  border-radius: 8px;
+  background-color: rgb(25, 25, 26);
+  padding: 20px;
+}
+
+.modal-body{
+  height: auto;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-button {
+  padding: 5px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(66, 66, 66);
 }
 
 @layer utilities {

@@ -12,15 +12,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className="bg-gradient-to-l from-indigo-500">
         <Provider>
           <Navbar />
-          <main>{children}</main>
+          <main>{children}
+            {modal}
+            <div id="modal-root" />
+          </main>
           <Footer />
         </Provider>
       </body>

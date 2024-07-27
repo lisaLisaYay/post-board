@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface Post {
   creator: {
@@ -17,6 +18,7 @@ interface Post {
 const PostCard = ({post}:{post:Post}) => {
 
   const {data:session} = useSession()
+
   return (
     <article className="m-2 w-[320px] p-3 rounded-md border border-slate-800 shadow-sm">
         <div className="flex mr-3">
@@ -27,7 +29,7 @@ const PostCard = ({post}:{post:Post}) => {
           {post.post}
         </p>
       {session?.user?.id===post.creator._id &&<div className="w-full flex justify-end pr-3 mt-2">
-        <button className="text-slate-500" >edit</button>
+        <Link className="text-slate-500" href={`/edit-post/${post._id}`}>edit</Link>
         <button className="text-slate-500 ml-5">delete</button>
       </div>}
     </article>
