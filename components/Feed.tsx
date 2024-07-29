@@ -15,15 +15,15 @@ interface Post {
 
 type Posts = Post[]
 
-const CardList =({data}:{ data: Posts | undefined })=>{
-  console.log(data);
+const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(post: Post)=>void })=>{
   
   return (
     <div className="lg:grid-cols-3 md:grid-cols-2 grid grid-cols-1">
       {data?.map((item:Post) => (
         <PostCard 
         key={item._id}
-        post={item} />
+        post={item}
+        handleDelete={handleDelete} />
       ))}
     </div>
   );
@@ -32,6 +32,20 @@ const CardList =({data}:{ data: Posts | undefined })=>{
 const Feed =()=>{
 
   const [posts, setPosts] = useState<Posts | undefined>()
+
+  const handleDelete = async(post:Post)=>{
+    try {
+      await fetch(`/api/post/${post._id.toString()}`,{
+        method: "DELETE"
+      })
+
+      const filteredPosts = posts?.filter((item)=>item._id !==post._id)
+      setPosts(filteredPosts)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   useEffect(()=>{
     const fetchPosts = async ()=>{
@@ -45,7 +59,7 @@ const Feed =()=>{
   },[])
     return (
       <section>
-        <CardList data={posts}/>
+        <CardList data={posts} handleDelete={handleDelete}/>
       </section>
     );
 }

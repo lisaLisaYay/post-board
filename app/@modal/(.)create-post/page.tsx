@@ -1,13 +1,12 @@
-"use client";
 
 import Modal from "@/components/modal";
-import EditPostForm from "@/components/PostEditForm";
+import CreatePostForm from "@/components/PostCreateForm";
 
 const EditoModal = () => {
 
   return (
     <Modal>
-      <EditPostForm />
+      <CreatePostForm />
     </Modal>
   );
 };
