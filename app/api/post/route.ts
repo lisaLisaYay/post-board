@@ -7,7 +7,7 @@ export const GET = async (res:Response)=>{
 
         const posts = await Post.find({}).populate("creator")
 
-        return new Response(JSON.stringify(posts), {status:200})
+        return new Response(JSON.stringify(posts.reverse()), {status:200})
     } catch (error) {
         return new Response("Failed to fetch", {status:500})
     }
