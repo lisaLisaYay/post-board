@@ -1,12 +1,18 @@
 import User from "@/models/user";
 import { connectToDb } from "@/utils/database";
-import mongoose from "mongoose";
 
 export const GET = async (req:Request, {params}:any)=>{
     try {
       await connectToDb();
 
-      //const posts = (await Post.find({creator:params.id}).populate("creator"))
+      const url = new URL(req.url)
+      const page = parseInt(url.searchParams.get("page") || "1")
+      const limit = parseInt(url.searchParams.get("limit") || "10")
+      const skip = (page-1) * limit
+
+      if(page<1 || limit < 1){
+        return new Response("Invalid pagination parameters", {status: 400})
+      }
 
       const user = await User.aggregate([
         {
@@ -33,16 +39,23 @@ export const GET = async (req:Request, {params}:any)=>{
           },
         },
         {
-          $project: {
-            _id: 1,
-            username: 1,
-            email: 1,
-            image: 1,
-            desc: 1,
-            posts: {
-              _id: 1,
-              post: 1,
-            },
+          $unwind: "$posts",
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+        
+        {
+          $group: {
+            _id: "$_id",
+            username: { $first: "$username" },
+            email: { $first: "$email" },
+            image: { $first: "$image" },
+            desc: { $first: "$desc" },
+            posts: { $push: "$posts" },
           },
         },
       ]);
