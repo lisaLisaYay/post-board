@@ -35,14 +35,20 @@ const CreatePostForm =()=>{
         }
       }
 
-    return (
-      <div className="post">
-        <div className=" place-self-start">
-          <div className="mb-5">{session?.user?.name}</div>
-        </div>
-        <Form submit={handleSubmit} post={post} setPost={setPost} type="Post now" status={submitting}/>
+if(session?.user){
+  return (
+    <div className="post">
+      <div className=" place-self-start">
+        <div className="mb-5">{session?.user?.name}</div>
       </div>
-    );
+      <Form submit={handleSubmit} post={post} setPost={setPost} type="Post now" status={submitting}/>
+    </div>
+  );
+} else {
+  return (
+    <div>login</div>
+  )
+}
 }
 
 export default CreatePostForm

@@ -40,7 +40,7 @@ const Navbar = ()=>{
                 <p>{session?.user.name} &#9662;</p>
               </button>
               {open&&<div className="grid absolute right-1 top-14 bg-slate-800 w-48">
-                <Link href="/profile" className="py-1 hover:bg-slate-100 hover:text-black justify-center flex" onClick={()=>setOpen(false)}>Profile</Link>
+                <Link href={`/profile/${session.user.name}`} className="py-1 hover:bg-slate-100 hover:text-black justify-center flex" onClick={()=>setOpen(false)}>Profile</Link>
                 <button className="py-1 hover:bg-slate-100 hover:text-black" onClick={() => signOut()}>
                   Log Out
                 </button>
