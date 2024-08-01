@@ -5,13 +5,13 @@ export const GET = async (req:Request, {params}:any)=>{
     try {
       await connectToDb();
 
-      const url = new URL(req.url)
-      const page = parseInt(url.searchParams.get("page") || "1")
-      const limit = parseInt(url.searchParams.get("limit") || "10")
-      const skip = (page-1) * limit
+      const url = new URL(req.url);
+      const page = parseInt(url.searchParams.get("page") || "1");
+      const limit = parseInt(url.searchParams.get("limit") || "10");
+      const skip = (page - 1) * limit;
 
-      if(page<1 || limit < 1){
-        return new Response("Invalid pagination parameters", {status: 400})
+      if (page < 1 || limit < 1) {
+        return new Response("Invalid pagination parameters", { status: 400 });
       }
 
       const user = await User.aggregate([
@@ -36,6 +36,7 @@ export const GET = async (req:Request, {params}:any)=>{
             posts: {
               $reverseArray: "$posts",
             },
+            postCount: { $size: "$posts" }
           },
         },
         {
@@ -47,7 +48,7 @@ export const GET = async (req:Request, {params}:any)=>{
         {
           $limit: limit,
         },
-        
+
         {
           $group: {
             _id: "$_id",
@@ -56,6 +57,7 @@ export const GET = async (req:Request, {params}:any)=>{
             image: { $first: "$image" },
             desc: { $first: "$desc" },
             posts: { $push: "$posts" },
+            postCount: { $first: "$postCount" }
           },
         },
       ]);

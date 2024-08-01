@@ -17,7 +17,8 @@ interface Props {
     _id:string,
     email:string,
     posts: Post[] | [],
-    desc:string
+    desc:string,
+    postCount: number
 }
 
 type ParamProps = {
@@ -34,8 +35,12 @@ const Profile =({params}:ParamProps)=>{
   const pageFromParams = parseInt(searchParams.get('page') || '1', 10);  
 
   const handlePageChange =(newPage:number)=>{
-    if(newPage > 0){
-      router.push(`/profile/${params.name}?page=${newPage}`)
+
+    if(profile) {
+      const maxPage = Math.ceil(profile.postCount / 10)
+      if(newPage > 0 && maxPage>=newPage){
+        router.push(`/profile/${params.name}?page=${newPage}`)
+      }
     }
   }
 
@@ -55,14 +60,11 @@ const Profile =({params}:ParamProps)=>{
   }
 
   useEffect(()=>{
-
-    if(profile){
-      setProfile({...profile, posts:[]})
-    }
+    
     const getPosts = async ()=>{
       const res = await fetch(`/api/user/${params.name}/posts?page=${pageFromParams}&limit=10`)
       const data = await res.json()
-      
+
       setProfile(data[0])
     }
 
@@ -74,6 +76,12 @@ const Profile =({params}:ParamProps)=>{
       }
     }
   },[session, searchParams])
+
+  useEffect(()=>{
+    if(profile){
+      setProfile({...profile, posts:[]})
+    }
+  },[searchParams])
 
     return (
       <section className="w-full grid place-items-center">
@@ -87,10 +95,10 @@ const Profile =({params}:ParamProps)=>{
             />
             <div>{profile.username}</div>
             <div>About me: {profile.desc}</div>
+            <div>Posts: {profile.postCount}</div>
             <Link href={`/create-post`}>Create Post</Link>
             <div>{profile.posts.map((item)=><ProfilePostCard key={item._id} post={item} username={profile.username} image={profile.image} id={profile._id} handleDelete={handleDelete}/>)}</div>
             <button onClick={()=>handlePageChange(pageFromParams-1)}>previous page</button>
-            {profile.posts &&<p>{pageFromParams}</p>}
             <button onClick={()=>handlePageChange(pageFromParams+1)}> next page</button>
           </div>
         ) : (
