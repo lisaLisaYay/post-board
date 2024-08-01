@@ -91,7 +91,7 @@ const Profile =({params}:ParamProps)=>{
             <div>{profile.username}</div>
             <div>About me: {profile.desc}</div>
             <div>Posts: {profile.postCount? profile.postCount: "User has no posts"}</div>
-            <Link href={`/create-post`}>Create Post</Link>
+            <Link scroll={false} href={`/create-post?page=${pageFromParams}`}>Create Post</Link>
             <div>
               {profile.posts.map((item) => (
                 <PostCard
@@ -102,13 +102,16 @@ const Profile =({params}:ParamProps)=>{
                   post={item.post}
                   postId={item._id}
                   handleDelete={handleDelete}
+                  linkParam={pageFromParams}
                 />
               ))}
             </div>
             {profile.postCount>10 &&
-            <div className="w-full flex justify-around">
-              <button className="btn" onClick={() => handlePageChange(pageFromParams - 1)}>previous</button>
-              <button className="btn"onClick={() => handlePageChange(pageFromParams + 1)}>next</button>
+            <div className="w-full flex justify-between">
+              <div>{pageFromParams!==1 &&<button className="btn" onClick={() => handlePageChange(pageFromParams - 1)}>previous</button>}</div>
+              <div>{pageFromParams !== Math.ceil(profile.postCount / 10) && <button className="btn"onClick={() => handlePageChange(pageFromParams + 1)}>next</button>}</div>
+              
+              
             </div>}
           </div>
         ) : (
