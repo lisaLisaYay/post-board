@@ -40,7 +40,10 @@ export const GET = async (req:Request, {params}:any)=>{
           },
         },
         {
-          $unwind: "$posts",
+          $unwind: {
+            path: "$posts",
+            preserveNullAndEmptyArrays: true
+          }
         },
         {
           $skip: skip,

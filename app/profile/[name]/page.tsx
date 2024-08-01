@@ -64,8 +64,6 @@ const Profile =({params}:ParamProps)=>{
     const getPosts = async ()=>{
       const res = await fetch(`/api/user/${params.name}/posts?page=${pageFromParams}&limit=10`)
       const data = await res.json()
-      console.log(data);
-      
 
       setProfile(data[0])
     }
@@ -80,15 +78,9 @@ const Profile =({params}:ParamProps)=>{
     
   },[session, searchParams])
 
-  useEffect(()=>{
-    if(profile){
-      setProfile({...profile, posts:[]})
-    }
-  },[searchParams])
-
     return (
       <section className="w-full grid place-items-center">
-        {profile? (
+        {profile ? (
           <div>
             <Image
               src={`${profile.image}`}
@@ -98,18 +90,26 @@ const Profile =({params}:ParamProps)=>{
             />
             <div>{profile.username}</div>
             <div>About me: {profile.desc}</div>
-            <div>Posts: {profile.postCount}</div>
+            <div>Posts: {profile.postCount? profile.postCount: "User has no posts"}</div>
             <Link href={`/create-post`}>Create Post</Link>
-            <div>{profile.posts.map((item)=><PostCard 
-        key={item._id}
-        username={profile.username}
-        userId={profile._id}
-        image={profile.image}
-        post={item.post}
-        postId={item._id}
-        handleDelete={handleDelete} />)}</div>
-            <button onClick={()=>handlePageChange(pageFromParams-1)}>previous page</button>
-            <button onClick={()=>handlePageChange(pageFromParams+1)}> next page</button>
+            <div>
+              {profile.posts.map((item) => (
+                <PostCard
+                  key={item._id}
+                  username={profile.username}
+                  userId={profile._id}
+                  image={profile.image}
+                  post={item.post}
+                  postId={item._id}
+                  handleDelete={handleDelete}
+                />
+              ))}
+            </div>
+            {profile.postCount>10 &&
+            <div className="w-full flex justify-around">
+              <button className="btn" onClick={() => handlePageChange(pageFromParams - 1)}>previous</button>
+              <button className="btn"onClick={() => handlePageChange(pageFromParams + 1)}>next</button>
+            </div>}
           </div>
         ) : (
           <div>loading</div>

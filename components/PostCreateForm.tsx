@@ -28,10 +28,6 @@ const CreatePostForm =()=>{
           console.log(error);
         } finally{
             router.back();
-            setTimeout(() => {
-              window.location.reload();
-              }, 50);
-            setSubmitting(false)
         }
       }
 

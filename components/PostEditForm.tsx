@@ -22,9 +22,6 @@ const EditPostForm =()=>{
 
             if(res.ok){
                 router.back()
-                setTimeout(() => {
-                  window.location.reload();
-                  }, 50);
             }
         } catch (error) {
             console.log(error);

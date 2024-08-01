@@ -23,6 +23,7 @@ const handler = NextAuth({
                 })
 
                 session.user.id = sessionUser._id.toString();
+                session.user.name = sessionUser.username.toString();
             }
 
             return session
@@ -38,7 +39,7 @@ const handler = NextAuth({
                 if(!userExists){
                     await User.create({
                         email: profile?.email,
-                        username: profile?.name?.replace(" ", "_") || profile?.login,
+                        username: profile?.name?.replace(" ", "") || profile?.login,
                         desc: "I'm just a user",
                         image:profile?.picture || profile?.avatar_url
                     })
