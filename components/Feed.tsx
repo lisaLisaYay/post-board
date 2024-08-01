@@ -15,14 +15,18 @@ interface Post {
 
 type Posts = Post[]
 
-const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(post: Post)=>void })=>{
+const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(post: string)=>void })=>{
   
   return (
     <div className="lg:grid-cols-3 md:grid-cols-2 grid grid-cols-1">
       {data?.map((item:Post) => (
         <PostCard 
         key={item._id}
-        post={item}
+        username={item.creator.username}
+        userId={item.creator._id}
+        image={item.creator.image}
+        post={item.post}
+        postId={item._id}
         handleDelete={handleDelete} />
       ))}
     </div>
@@ -33,13 +37,13 @@ const Feed =()=>{
 
   const [posts, setPosts] = useState<Posts | undefined>()
 
-  const handleDelete = async(post:Post)=>{
+  const handleDelete = async(postId:string)=>{
     try {
-      await fetch(`/api/post/${post._id.toString()}`,{
+      await fetch(`/api/post/${postId.toString()}`,{
         method: "DELETE"
       })
 
-      const filteredPosts = posts?.filter((item)=>item._id !==post._id)
+      const filteredPosts = posts?.filter((item)=>item._id !==postId)
       setPosts(filteredPosts)
     } catch (error) {
       console.log(error);

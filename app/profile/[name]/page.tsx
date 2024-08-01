@@ -1,7 +1,7 @@
 "use client"
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import ProfilePostCard from "@/components/ProfilePostCard";
+import PostCard from "@/components/PostCard";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams  } from "next/navigation";
@@ -44,14 +44,14 @@ const Profile =({params}:ParamProps)=>{
     }
   }
 
-  const handleDelete = async(post:Post|null)=>{
+  const handleDelete = async(postId:string)=>{
     try {
-      await fetch(`/api/post/${post?._id.toString()}`,{
+      await fetch(`/api/post/${postId.toString()}`,{
         method: "DELETE"
       })
 
       if(profile){
-        const filteredPosts = profile.posts.filter((item) => item._id !== post?._id);
+        const filteredPosts = profile.posts.filter((item) => item._id !== postId);
         setProfile({ ...profile, posts: filteredPosts });
       }
     } catch (error) {
@@ -64,6 +64,8 @@ const Profile =({params}:ParamProps)=>{
     const getPosts = async ()=>{
       const res = await fetch(`/api/user/${params.name}/posts?page=${pageFromParams}&limit=10`)
       const data = await res.json()
+      console.log(data);
+      
 
       setProfile(data[0])
     }
@@ -75,6 +77,7 @@ const Profile =({params}:ParamProps)=>{
         console.log(error);
       }
     }
+    
   },[session, searchParams])
 
   useEffect(()=>{
@@ -97,7 +100,14 @@ const Profile =({params}:ParamProps)=>{
             <div>About me: {profile.desc}</div>
             <div>Posts: {profile.postCount}</div>
             <Link href={`/create-post`}>Create Post</Link>
-            <div>{profile.posts.map((item)=><ProfilePostCard key={item._id} post={item} username={profile.username} image={profile.image} id={profile._id} handleDelete={handleDelete}/>)}</div>
+            <div>{profile.posts.map((item)=><PostCard 
+        key={item._id}
+        username={profile.username}
+        userId={profile._id}
+        image={profile.image}
+        post={item.post}
+        postId={item._id}
+        handleDelete={handleDelete} />)}</div>
             <button onClick={()=>handlePageChange(pageFromParams-1)}>previous page</button>
             <button onClick={()=>handlePageChange(pageFromParams+1)}> next page</button>
           </div>
