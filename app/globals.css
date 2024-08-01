@@ -20,6 +20,8 @@ article {
 
 main {
   margin-top: 70px;
+  display: grid;
+  place-items: center;
 }
 
 .btn {
@@ -53,13 +55,21 @@ main {
   background-color: transparent;
 }
 
-.post {
+.post-form {
   border-radius: 8px;
   background-color: rgb(25, 25, 26);
   padding: 20px;
   display: grid;
   place-items: center;
   width: 100%;
+  max-width: 500px;
+}
+
+.post {
+  background-color: rgb(25, 25, 26);
+}
+.post-btn {
+  color: gray;
 }
 
 .modal-body{

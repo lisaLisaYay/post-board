@@ -18,7 +18,7 @@ type Posts = Post[]
 const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(post: string)=>void })=>{
   
   return (
-    <div className="lg:grid-cols-3 md:grid-cols-2 grid grid-cols-1">
+    <div className="grid place-items-center w-full">
       {data?.map((item:Post) => (
         <PostCard 
         key={item._id}
@@ -62,7 +62,7 @@ const Feed =()=>{
     fetchPosts()
   },[])
     return (
-      <section>
+      <section className="w-full flex justify-center">
         <CardList data={posts} handleDelete={handleDelete}/>
       </section>
     );

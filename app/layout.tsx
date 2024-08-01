@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-l from-indigo-500">
+      <body className="bg-black">
         <Provider>
           <Navbar />
           <main>{children}

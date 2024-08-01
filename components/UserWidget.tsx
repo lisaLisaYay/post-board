@@ -1,9 +1,9 @@
 import Image from "next/image"
 import Link from "next/link"
 
-const UserWidget =({userImage, userName}:{userImage:string, userName:string})=>{
+const UserWidget =({userImage, userName}:{userImage:string| undefined | null, userName:string| undefined | null})=>{
     return(
-        <Link href={`/profile/${userName}?page=1`} className="flex relative items-center my-2">
+        <Link href={`/profile/${userName}?page=1`} className="flex relative items-center my-2 w-fit">
         <Image
           src={`${userImage}`}
           alt="icon"

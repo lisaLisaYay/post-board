@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/components/modal";
-import EditPostForm from "@/components/PostEditForm";
+import EditPostForm from "@/app/edit-post/[id]/page";
 
 const EditoModal = () => {
 

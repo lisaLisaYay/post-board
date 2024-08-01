@@ -1,6 +1,6 @@
 
 import Modal from "@/components/modal";
-import CreatePostForm from "@/components/PostCreateForm";
+import CreatePostForm from "@/app/create-post/page";
 
 const EditoModal = () => {
 
