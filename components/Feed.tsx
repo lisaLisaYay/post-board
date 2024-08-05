@@ -1,5 +1,6 @@
 import PostCard from "@/components/PostCard";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface Post {
   creator: {
@@ -7,7 +8,7 @@ interface Post {
     username:string,
     _id:string
   };
-  likedBy: [];
+  isLiked: boolean;
   post: string;
   __v: string;
   _id: string;
@@ -27,6 +28,7 @@ const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(p
         image={item.creator.image}
         post={item.post}
         postId={item._id}
+        isLiked={item.isLiked}
         handleDelete={handleDelete} />
       ))}
     </div>
@@ -36,6 +38,7 @@ const CardList =({data, handleDelete}:{ data: Posts | undefined, handleDelete:(p
 const Feed =()=>{
 
   const [posts, setPosts] = useState<Posts | undefined>()
+  const { data: session } = useSession();
 
   const handleDelete = async(postId:string)=>{
     try {
@@ -53,14 +56,19 @@ const Feed =()=>{
 
   useEffect(()=>{
     const fetchPosts = async ()=>{
-      const res =await fetch("api/post")
+      console.log(session?.user?.id);
+      
+      const res =await fetch(`api/post?userId=${session?.user?.id}`)
       const data = await res.json()
+
+      console.log(data);
+      
 
       setPosts(data)
     }
 
     fetchPosts()
-  },[])
+  },[session?.user?.id])
     return (
       <section className="w-full flex justify-center">
         <CardList data={posts} handleDelete={handleDelete}/>

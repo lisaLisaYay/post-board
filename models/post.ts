@@ -9,10 +9,10 @@ const PostSchema = new Schema({
         type: String,
         required: [true, "Post can't be empty"]
     },
-    likedBy:{
-        type: Array,
-        default:[]
-    }
+    likeCount:{
+        type: Number,
+        default:0
+    },
 })
 
 const Post = models.Post || model("Post", PostSchema)
